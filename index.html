@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense &amp; Budget Visualizer</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+
+    <!-- ── Header ─────────────────────────────────── -->
+    <header class="site-header">
+      <div class="header-inner">
+        <h1 class="site-title">💸 Budget Visualizer</h1>
+        <button id="themeToggle" class="btn-icon-round" aria-label="Toggle dark/light mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main-content">
+
+      <!-- ── Total Balance ──────────────────────── -->
+      <section class="balance-card" aria-label="Total spending">
+        <p class="balance-label">Total Spending</p>
+        <p class="balance-amount" id="totalBalance">Rp 0</p>
+      </section>
+
+      <!-- ── Spending Limit ─────────────────────── -->
+      <section class="card limit-section" aria-label="Spending limit">
+        <div class="limit-header">
+          <h2 class="section-title">Spending Limit</h2>
+          <span class="limit-status-badge" id="limitBadge" hidden>⚠️ Over limit!</span>
+        </div>
+
+        <div class="limit-input-row">
+          <label for="limitInput" class="sr-only">Set spending limit in Rupiah</label>
+          <input
+            type="number"
+            id="limitInput"
+            class="input-field"
+            placeholder="Set limit (e.g. 500000)"
+            min="1"
+            aria-label="Spending limit amount"
+          />
+          <button id="setLimitBtn" class="btn-secondary">Set</button>
+          <button id="clearLimitBtn" class="btn-ghost" hidden>Clear</button>
+        </div>
+
+        <div class="limit-display" id="limitDisplay" hidden>
+          <div class="limit-numbers">
+            <span id="limitSpent">Rp 0</span>
+            <span class="limit-separator">of</span>
+            <span id="limitMax">Rp 0</span>
+          </div>
+          <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progressBar" aria-label="Spending progress">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <p class="limit-pct" id="limitPct">0% used</p>
+        </div>
+      </section>
+
+      <!-- ── Add Transaction Form ───────────────── -->
+      <section class="card form-section" aria-label="Add transaction">
+        <h2 class="section-title">Add Transaction</h2>
+
+        <form id="transactionForm" novalidate>
+          <div class="form-group">
+            <label for="itemName">Item Name</label>
+            <input
+              type="text"
+              id="itemName"
+              class="input-field"
+              placeholder="e.g. Lunch, Bus fare, Cinema"
+              autocomplete="off"
+            />
+            <span class="error-msg" id="itemNameError" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="amount">Amount (Rp)</label>
+            <input
+              type="number"
+              id="amount"
+              class="input-field"
+              placeholder="e.g. 25000"
+              min="1"
+            />
+            <span class="error-msg" id="amountError" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" class="input-field">
+              <option value="">— Select a category —</option>
+              <option value="Food">🍔 Food</option>
+              <option value="Transport">🚌 Transport</option>
+              <option value="Fun">🎮 Fun</option>
+            </select>
+            <span class="error-msg" id="categoryError" role="alert"></span>
+          </div>
+
+          <button type="submit" class="btn-primary">Add Transaction</button>
+        </form>
+      </section>
+
+      <!-- ── Pie Chart ──────────────────────────── -->
+      <section class="card chart-section" aria-label="Spending by category">
+        <h2 class="section-title">Spending by Category</h2>
+        <div class="chart-container">
+          <canvas id="pieChart" aria-label="Pie chart of spending by category" role="img"></canvas>
+          <p class="empty-chart" id="emptyChart">Add transactions to see the chart.</p>
+        </div>
+      </section>
+
+      <!-- ── Transaction List ───────────────────── -->
+      <section class="card list-section" aria-label="Transaction list">
+        <div class="list-header">
+          <h2 class="section-title">Transactions</h2>
+          <div class="sort-control">
+            <label for="sortSelect" class="sr-only">Sort transactions</label>
+            <select id="sortSelect" class="input-field input-field--sm" aria-label="Sort transactions">
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="amount-desc">Amount: High → Low</option>
+              <option value="amount-asc">Amount: Low → High</option>
+              <option value="category">Category A–Z</option>
+            </select>
+          </div>
+        </div>
+
+        <ul class="transaction-list" id="transactionList" aria-live="polite" aria-label="List of transactions">
+          <!-- populated by JS -->
+        </ul>
+
+        <p class="empty-list" id="emptyList" hidden>
+          No transactions yet. Add your first one above!
+        </p>
+      </section>
+
+    </main>
+
+    <script src="js/app.js"></script>
+  </body>
+</html>

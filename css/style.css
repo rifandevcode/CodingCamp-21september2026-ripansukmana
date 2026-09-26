@@ -1,0 +1,599 @@
+/* ==========================================================
+   Expense & Budget Visualizer — style.css
+   Mobile-first, single file, light + dark themes
+   ========================================================== */
+
+/* ----------------------------------------------------------
+   1. CSS Custom Properties (Design Tokens)
+   ---------------------------------------------------------- */
+:root {
+  /* Colors – light mode */
+  --color-bg:          #f0f2f5;
+  --color-surface:     #ffffff;
+  --color-surface-alt: #f7f8fa;
+  --color-border:      #e4e7ec;
+  --color-primary:     #4361ee;
+  --color-primary-hover: #3451d1;
+  --color-danger:      #e63946;
+  --color-danger-bg:   #fff0f1;
+  --color-warning:     #f4a261;
+  --color-warning-bg:  #fff7ed;
+  --color-success:     #2a9d8f;
+  --color-text:        #1a1d2e;
+  --color-text-muted:  #6b7280;
+  --color-text-inverse:#ffffff;
+
+  /* Gradient for balance card */
+  --gradient-balance: linear-gradient(135deg, #4361ee 0%, #7209b7 100%);
+
+  /* Shadows */
+  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-btn:  0 2px 6px rgba(67, 97, 238, 0.30);
+
+  /* Shape */
+  --radius:    12px;
+  --radius-sm: 8px;
+  --radius-xs: 6px;
+
+  /* Typography */
+  --font: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-size-base: 1rem;
+
+  /* Transitions */
+  --transition: 0.2s ease;
+}
+
+/* Colors – dark mode */
+[data-theme="dark"] {
+  --color-bg:          #0d0f1a;
+  --color-surface:     #161926;
+  --color-surface-alt: #1e2235;
+  --color-border:      #2b2f45;
+  --color-primary:     #6480ff;
+  --color-primary-hover: #4f6ef7;
+  --color-danger:      #ff6b6b;
+  --color-danger-bg:   #2a1212;
+  --color-warning:     #ffb347;
+  --color-warning-bg:  #1f1505;
+  --color-success:     #3fc1b0;
+  --color-text:        #e8eaf6;
+  --color-text-muted:  #8b92a9;
+  --gradient-balance:  linear-gradient(135deg, #3451d1 0%, #5c0f8b 100%);
+  --shadow-card:       0 1px 4px rgba(0, 0, 0, 0.4), 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ----------------------------------------------------------
+   2. Reset & Base
+   ---------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+  font-size: var(--font-size-base);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  min-height: 100vh;
+  transition: background-color var(--transition), color var(--transition);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Accessibility: visually hidden but readable by screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ----------------------------------------------------------
+   3. Header
+   ---------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+  transition: background-color var(--transition);
+}
+
+.header-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: var(--color-text);
+}
+
+/* ----------------------------------------------------------
+   4. Layout
+   ---------------------------------------------------------- */
+.main-content {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ----------------------------------------------------------
+   5. Card
+   ---------------------------------------------------------- */
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+  transition: background-color var(--transition), border-color var(--transition);
+}
+
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 14px;
+}
+
+/* ----------------------------------------------------------
+   6. Balance Card
+   ---------------------------------------------------------- */
+.balance-card {
+  background: var(--gradient-balance);
+  border: none;
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  text-align: center;
+  color: var(--color-text-inverse);
+  box-shadow: 0 4px 24px rgba(67, 97, 238, 0.3);
+}
+
+.balance-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-bottom: 6px;
+}
+
+.balance-amount {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  word-break: break-all;
+}
+
+/* ----------------------------------------------------------
+   7. Spending Limit Section
+   ---------------------------------------------------------- */
+.limit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.limit-header .section-title {
+  margin-bottom: 0;
+}
+
+.limit-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+.limit-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.limit-input-row .input-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.limit-display {
+  margin-top: 4px;
+}
+
+.limit-numbers {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.limit-numbers span:first-child {
+  color: var(--color-primary);
+  font-size: 1rem;
+}
+
+.limit-separator {
+  color: var(--color-text-muted);
+  font-weight: 400;
+  font-size: 0.82rem;
+}
+
+/* Progress bar */
+.progress-track {
+  width: 100%;
+  height: 10px;
+  background-color: var(--color-surface-alt);
+  border-radius: 99px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 99px;
+  background-color: var(--color-primary);
+  transition: width 0.4s ease, background-color 0.3s ease;
+}
+
+/* Fill turns warning color when approaching limit (>=80%) */
+.progress-fill.warn {
+  background-color: var(--color-warning);
+}
+
+/* Fill turns danger color when at/over limit (>=100%) */
+.progress-fill.over {
+  background-color: var(--color-danger);
+}
+
+.limit-pct {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin-top: 5px;
+  text-align: right;
+}
+
+/* ----------------------------------------------------------
+   8. Form
+   ---------------------------------------------------------- */
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px 13px;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  background-color: var(--color-surface-alt);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition),
+              background-color var(--transition);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.input-field:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+  background-color: var(--color-surface);
+}
+
+.input-field.is-invalid {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.12);
+}
+
+.input-field--sm {
+  padding: 7px 10px;
+  font-size: 0.83rem;
+  width: auto;
+}
+
+/* Native select arrow */
+select.input-field {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 34px;
+}
+
+.error-msg {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--color-danger);
+  margin-top: 4px;
+  min-height: 1.1em;
+}
+
+/* ----------------------------------------------------------
+   9. Buttons
+   ---------------------------------------------------------- */
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+  transition: background-color var(--transition), transform 0.12s, box-shadow var(--transition);
+  margin-top: 6px;
+  letter-spacing: 0.2px;
+}
+
+.btn-primary:hover  { background-color: var(--color-primary-hover); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  padding: 10px 16px;
+  font-family: var(--font);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text);
+  background-color: var(--color-surface-alt);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--transition), border-color var(--transition);
+}
+
+.btn-secondary:hover { background-color: var(--color-border); }
+
+.btn-ghost {
+  padding: 10px 12px;
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: none;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.btn-ghost:hover { color: var(--color-danger); border-color: var(--color-danger); }
+
+/* Round icon button (theme toggle) */
+.btn-icon-round {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background-color: var(--color-surface-alt);
+  border: 1.5px solid var(--color-border);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color var(--transition), transform 0.2s;
+}
+
+.btn-icon-round:hover { background-color: var(--color-border); transform: rotate(18deg); }
+
+/* ----------------------------------------------------------
+   10. Pie Chart
+   ---------------------------------------------------------- */
+.chart-container {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+#pieChart {
+  display: block;
+}
+
+.empty-chart {
+  display: none;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  padding: 32px 0;
+}
+
+/* ----------------------------------------------------------
+   11. Transaction List
+   ---------------------------------------------------------- */
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.list-header .section-title {
+  margin-bottom: 0;
+}
+
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Scrollable list */
+.transaction-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+/* Subtle scrollbar */
+.transaction-list::-webkit-scrollbar       { width: 4px; }
+.transaction-list::-webkit-scrollbar-track { background: transparent; }
+.transaction-list::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 99px; }
+
+/* Empty state */
+.empty-list {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  padding: 32px 0;
+}
+
+/* Transaction item */
+.transaction-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition), border-color var(--transition);
+  animation: slideDown 0.2s ease both;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Highlight when this single item exceeds the spending limit */
+.transaction-item.over-limit {
+  background-color: var(--color-warning-bg);
+  border-color: var(--color-warning);
+}
+
+.item-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  width: 34px;
+  text-align: center;
+  line-height: 1;
+}
+
+.item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-category {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.item-amount {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.btn-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  padding: 4px 5px;
+  border-radius: var(--radius-xs);
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color var(--transition), background-color var(--transition);
+}
+
+.btn-delete:hover {
+  color: var(--color-danger);
+  background-color: var(--color-danger-bg);
+}
+
+/* ----------------------------------------------------------
+   12. Responsive — Tablet / Desktop
+   ---------------------------------------------------------- */
+@media (min-width: 480px) {
+  .balance-amount { font-size: 2.6rem; }
+}
+
+@media (min-width: 640px) {
+  .main-content { padding: 28px 24px 56px; }
+
+  .chart-container { max-width: 340px; }
+}
+
+/* ----------------------------------------------------------
+   13. Utility: hide
+   ---------------------------------------------------------- */
+[hidden] { display: none !important; }
